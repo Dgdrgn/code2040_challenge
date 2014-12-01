@@ -20,10 +20,6 @@ $.ajax({
     token = response.result;
     console.log("Token: " + token);
     stage1();
-    stage2();
-    stage3();
-    stage4();
-    apiStatus();
 });
 
 //=============================
@@ -68,6 +64,7 @@ var stage1 = function() {
             data: JSON.stringify(dictionary)
         }).done(function() {
             console.log("String Sent: " + reversedString);
+            stage2();
         });
     }
 }
@@ -117,6 +114,7 @@ var stage2 = function() {
             data: JSON.stringify(dictionary)
         }).done(function() {
             console.log("Index Sent: " + index);
+            stage3();
         });
     }
 }
@@ -127,7 +125,7 @@ var stage2 = function() {
 var stage3 = function() {
     var prefix = '';
     var arrayOfStrings;
-    var arrayNoPrefix;
+    var arrayNoPrefix = new Array();
 
     // Retrieve prefix and array
     dictionary = {
@@ -148,9 +146,9 @@ var stage3 = function() {
 
     var buildArray = function() {
         // Find the strings that do not start with the prefix
-        var prefixEnd = prefix.length - 1;
+        var prefixEnd = prefix.length;
         for (var i = 0; i < arrayOfStrings.length; i++) {
-            if(arrayOfStrings[i].substring(0,prefixEnd) != prefix) {
+            if((arrayOfStrings[i].substring(0,prefixEnd)) != prefix) {
                 arrayNoPrefix.push(arrayOfStrings[i]);
             }
         }
@@ -167,6 +165,7 @@ var stage3 = function() {
             data: JSON.stringify(dictionary)
         }).done(function() {
             console.log("Array Sent: " + arrayNoPrefix);
+            stage4();
         });
     }
 }
@@ -197,10 +196,23 @@ var stage4 = function() {
     });
 
     var incrementTime = function() {
+        // Split the date string into integers
+        var year = parseInt(dateStamp.substring(0, 4));
+        var month = parseInt(dateStamp.substring(5, 7));
+        var day = parseInt(dateStamp.substring(8, 10));
+        var hour = parseInt(dateStamp.substring(11, 13));
+        var minute = parseInt(dateStamp.substring(14, 16));
+        var second = parseInt(dateStamp.substring(17, 19));
+        var milli = parseInt(dateStamp.substring(20, 23));
+
         // Increment time by the amount in the interval
-        var incDate = new Date(dateStamp + interval*1000);
+        var incDate = new Date(year, month-1, day, hour, minute, second, milli);
+        console.log(incDate);
+        incDate.setSeconds(incDate.getSeconds() + interval);
+        console.log(incDate);
         newDateTime = incDate.toISOString();
-        // Send reversed string
+        console.log(newDateTime);
+        // Send new DateStamp
         dictionary = {
             token: token,
             datestamp: newDateTime
@@ -212,6 +224,7 @@ var stage4 = function() {
             data: JSON.stringify(dictionary)
         }).done(function() {
             console.log("New DateStamp Sent: " + newDateTime);
+            apiStatus();
         });
     }
 }
