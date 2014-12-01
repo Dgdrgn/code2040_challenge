@@ -3,6 +3,7 @@
  * Email: jesusega@usc.edu
  */
 
+var html = '';
 var token = "";
 var email = "jesusega@usc.edu";
 var github = "https://github.com/jesusega/code2040_challenge";
@@ -18,7 +19,8 @@ $.ajax({
     data: JSON.stringify(dictionary)
 }).done(function(response) {
     token = response.result;
-    console.log("Token: " + token);
+    html += "Token: " + token + "<br/>";
+    $('#console').html(html);
     stage1();
 });
 
@@ -41,7 +43,8 @@ var stage1 = function() {
         data: JSON.stringify(dictionary)
     }).done(function(response) {
         oldString = response.result;
-        console.log("String Retrieved: " + oldString);
+        html += "String Retrieved: " + oldString + "<br/>";
+        $('#console').html(html);
         reverseString();
     });
 
@@ -63,7 +66,8 @@ var stage1 = function() {
             dataType: 'JSON',
             data: JSON.stringify(dictionary)
         }).done(function() {
-            console.log("String Sent: " + reversedString);
+            html += "String Sent: " + reversedString + "<br/>";
+            $('#console').html(html);
             stage2();
         });
     }
@@ -89,8 +93,10 @@ var stage2 = function() {
     }).done(function(response) {
         needle = response.result.needle;
         haystack = response.result.haystack;
-        console.log("Needle Retrieved: " + needle);
-        console.log("Haystack Retrieved: " + haystack);
+        html += "Needle Retrieved: " + needle + "<br/>";
+        $('#console').html(html);
+        html += "Haystack Retrieved: " + haystack + "<br/>";
+        $('#console').html(html);
         findNeedle();
     });
 
@@ -113,7 +119,8 @@ var stage2 = function() {
             dataType: 'JSON',
             data: JSON.stringify(dictionary)
         }).done(function() {
-            console.log("Index Sent: " + index);
+            html += "Index Sent: " + index + "<br/>";
+            $('#console').html(html);
             stage3();
         });
     }
@@ -139,8 +146,9 @@ var stage3 = function() {
     }).done(function(response) {
         prefix = response.result.prefix;
         arrayOfStrings = response.result.array;
-        console.log("Prefix Retrieved: " + prefix);
-        console.log("Array Retrieved: " + arrayOfStrings);
+        html += "Prefix Retrieved: " + prefix + "<br/>";
+        $('#console').html(html);
+        html += "Array Retrieved: " + arrayOfStrings + "<br/>";
         buildArray();
     });
 
@@ -164,7 +172,8 @@ var stage3 = function() {
             dataType: 'JSON',
             data: JSON.stringify(dictionary)
         }).done(function() {
-            console.log("Array Sent: " + arrayNoPrefix);
+            html += "Array Sent: " + arrayNoPrefix + "<br/>";
+            $('#console').html(html);
             stage4();
         });
     }
@@ -190,8 +199,10 @@ var stage4 = function() {
     }).done(function(response) {
         dateStamp = response.result.datestamp;
         interval = response.result.interval;
-        console.log("DateStamp Retrieved: " + dateStamp);
-        console.log("Interval Retrieved: " + interval);
+        html += "DateStamp Retrieved: " + dateStamp + "<br/>";
+        $('#console').html(html);
+        html += "Interval Retrieved: " + interval + "<br/>";
+        $('#console').html(html);
         incrementTime();
     });
 
@@ -200,7 +211,6 @@ var stage4 = function() {
         var incDate = new Date(dateStamp);
         incDate.setSeconds(incDate.getSeconds() + interval);
         newDateTime = moment(incDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-        console.log(newDateTime);
         // Send new DateStamp
         dictionary = {
             token: token,
@@ -212,7 +222,8 @@ var stage4 = function() {
             dataType: 'JSON',
             data: JSON.stringify(dictionary)
         }).done(function() {
-            console.log("New DateStamp Sent: " + newDateTime);
+            html += "New DateStamp Sent: " + newDateTime + "<br/>";
+            $('#console').html(html);
             apiStatus();
         });
     }
