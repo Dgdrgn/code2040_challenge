@@ -196,21 +196,10 @@ var stage4 = function() {
     });
 
     var incrementTime = function() {
-        // Split the date string into integers
-        var year = parseInt(dateStamp.substring(0, 4));
-        var month = parseInt(dateStamp.substring(5, 7));
-        var day = parseInt(dateStamp.substring(8, 10));
-        var hour = parseInt(dateStamp.substring(11, 13));
-        var minute = parseInt(dateStamp.substring(14, 16));
-        var second = parseInt(dateStamp.substring(17, 19));
-        var milli = parseInt(dateStamp.substring(20, 23));
-
         // Increment time by the amount in the interval
-        var incDate = new Date(year, month-1, day, hour, minute, second, milli);
-        console.log(incDate);
+        var incDate = new Date(dateStamp);
         incDate.setSeconds(incDate.getSeconds() + interval);
-        console.log(incDate);
-        newDateTime = incDate.toISOString();
+        newDateTime = moment(incDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
         console.log(newDateTime);
         // Send new DateStamp
         dictionary = {
