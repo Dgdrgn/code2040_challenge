@@ -23,6 +23,7 @@ $.ajax({
     stage2();
     stage3();
     stage4();
+    apiStatus();
 });
 
 //=============================
@@ -174,44 +175,60 @@ var stage3 = function() {
 // Stage IV: The Dating Game
 // ============================
 var stage4 = function() {
-    var dateStamp = '';
-    var reversedString = '';
-    var stringArray;
+    var dateStamp;
+    var interval;
+    var newDateTime;
 
     // Retrieve string
     dictionary = {
         token: token
     }
     $.ajax({
-        url: 'http://challenge.code2040.org/api/getstring',
+        url: 'http://challenge.code2040.org/api/time',
         type: 'POST',
         dataType: 'JSON',
         data: JSON.stringify(dictionary)
     }).done(function(response) {
-        oldString = response.result;
-        console.log("String Retrieved: " + oldString);
-        reverseString();
+        dateStamp = response.result.datestamp;
+        interval = response.result.interval;
+        console.log("DateStamp Retrieved: " + dateStamp);
+        console.log("Interval Retrieved: " + interval);
+        incrementTime();
     });
 
-    var reverseString = function() {
-        // Reverse the string
-        stringArray = oldString.split('');
-        for (var i = stringArray.length-1; i >= 0; i--) {
-            reversedString += stringArray[i];
-        }
-
+    var incrementTime = function() {
+        // Increment time by the amount in the interval
+        var incDate = new Date(dateStamp + interval*1000);
+        newDateTime = incDate.toISOString();
         // Send reversed string
         dictionary = {
             token: token,
-            string: reversedString
+            datestamp: newDateTime
         }
         $.ajax({
-            url: 'http://challenge.code2040.org/api/validatestring',
+            url: 'http://challenge.code2040.org/api/validatetime',
             type: 'POST',
             dataType: 'JSON',
             data: JSON.stringify(dictionary)
         }).done(function() {
-            console.log("String Sent: " + reversedString);
+            console.log("New DateStamp Sent: " + newDateTime);
         });
     }
+}
+
+var apiStatus = function() {
+    var status;
+    // Retrieve status
+    dictionary = {
+        token: token
+    }
+    $.ajax({
+        url: 'http://challenge.code2040.org/api/status',
+        type: 'POST',
+        dataType: 'JSON',
+        data: JSON.stringify(dictionary)
+    }).done(function(response) {
+        status = response.result;
+        console.log("Status of API Challenge: " + status);
+    });
 }
